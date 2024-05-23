@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
+import "package:movie_app/widgets/casting_cards.dart";
 
 class DetailsScreen extends StatelessWidget {
+  const DetailsScreen({super.key});
   @override
   Widget build(BuildContext context) {
     final String movie =
@@ -12,13 +13,18 @@ class DetailsScreen extends StatelessWidget {
       slivers: [
         _CustomAppBar(),
         SliverList(
-            delegate:
-                SliverChildListDelegate([_PosterAndTitle(), 
-                _Overview(),
-                _Overview(),
-                _Overview(),
-                
-                ])),
+            delegate: SliverChildListDelegate([
+          _PosterAndTitle(),
+          _Overview(),
+          _Overview(),
+          _Overview(),
+          _Overview(),
+          _Overview(),
+          _Overview(),
+          _Overview(),
+          _Overview(),
+          CastingCards()
+        ])),
       ],
     ));
   }
@@ -28,6 +34,9 @@ class _CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      iconTheme: const IconThemeData(
+        color: Colors.white, //change your color here
+      ),
       backgroundColor: Colors.green[900],
       expandedHeight: 200,
       floating: false,
@@ -36,6 +45,7 @@ class _CustomAppBar extends StatelessWidget {
         centerTitle: true,
         titlePadding: const EdgeInsets.all(0),
         title: Container(
+          padding: const EdgeInsets.only(bottom: 10),
           width: double.infinity,
           color: Colors.black12,
           alignment: Alignment.bottomCenter,
@@ -114,11 +124,11 @@ class _Overview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         child: Text(
           'In nulla eiusmod nisi aliquip laborum. Irure minim aliqua incididunt sint esse ullamco aute eu. Ipsum amet cupidatat commodo nisi minim aliquip tempor culpa proident mollit ad qui aliqua.',
           textAlign: TextAlign.justify,
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.bodyLarge,
         ));
   }
 }
