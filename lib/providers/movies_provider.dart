@@ -1,14 +1,16 @@
 import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:movie_app/models/models.dart';
 
 class MoviesProvider extends ChangeNotifier {
   String _baseUrl = 'api.themoviedb.org';
-  String _apiKey = '1865f43a0549ca50d341dd9ab8b29f49';
+  String _apiKey = '7a94dbeccf439b5c1ac674b23a88a368';
   String _language = 'es-ES';
 
+  List<Movie> onDisplayMovies = [];
+
   MoviesProvider() {
-    print('Movies provider inicializado');
     this.getOnDisplayMovies();
   }
 
@@ -18,13 +20,9 @@ class MoviesProvider extends ChangeNotifier {
 
     // Await the http get response, then decode the json-formatted response.
     final response = await http.get(url);
-    if (response.statusCode == 200) {
-      var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
-      var itemCount = jsonResponse['totalItems'];
-      // print('Number of books about http: $itemCount.');
-    } else {
-      // print('Request failed with status: ${response.statusCode}.');
-    }
-    // print(response.body);
+    final nowPlayingResponse = NowPlayingResponse.fromJson(response.body);
+
+    onDisplayMovies = nowPlayingResponse.results;
+    notifyListeners();
   }
 }
