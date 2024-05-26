@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/models/models.dart';
 
 class MovieSlider extends StatelessWidget {
-  const MovieSlider({super.key});
+  final List<Movie> movies;
+  final String? title;
+
+  const MovieSlider({super.key, required this.movies, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -11,21 +15,20 @@ class MovieSlider extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              'Popular',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              this.title != null ? this.title.toString() : 'no-title',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(
-            height: 5
-          ),
+          const SizedBox(height: 5),
           Expanded(
             child: ListView.builder(
-                itemCount: 20,
+                itemCount: movies.length,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (_, int index) => _MoviePoster()),
+                itemBuilder: (_, int index) =>
+                    _MoviePoster(movie: movies[index])),
           ),
         ],
       ),
@@ -34,6 +37,8 @@ class MovieSlider extends StatelessWidget {
 }
 
 class _MoviePoster extends StatelessWidget {
+  final Movie movie;
+  const _MoviePoster({required this.movie});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,9 +52,9 @@ class _MoviePoster extends StatelessWidget {
                 arguments: 'movie-instance'),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: const FadeInImage(
-                  placeholder: AssetImage('assets/no-image.jpg'),
-                  image: AssetImage('assets/no-image.jpg'),
+              child: FadeInImage(
+                  placeholder: const AssetImage('assets/no-image.jpg'),
+                  image: NetworkImage(movie.fullPosterImg),
                   width: 130,
                   height: 190,
                   fit: BoxFit.cover),
@@ -58,9 +63,9 @@ class _MoviePoster extends StatelessWidget {
           const SizedBox(
             height: 5,
           ),
-          const Text(
-            'Movie Name',
-            maxLines: 2,
+          Text(
+            movie.title,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
           )
